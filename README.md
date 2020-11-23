@@ -1,2 +1,2 @@
 # PDM_Project
-Kareltje
+Kareltje is a warehouse filling robot with path planning.
