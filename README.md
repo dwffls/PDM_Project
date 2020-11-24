@@ -7,7 +7,7 @@ Kareltje is a warehouse filling robot with path planning.
   - [ ] Papers Path Planning
   - [x] Papers Warehouse 
 
-- [ ] Robot Model (Timo/Luuk)
+- [x] Robot Model (Timo/Luuk)
   - [x] Kinematic Model 
   - [x] Equations of motion 
   - [x] Workspace
