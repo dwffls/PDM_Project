@@ -1,0 +1,9 @@
+name: python_robotics
+dependencies:
+- python
+- pip
+- scipy
+- numpy
+- pandas
+- matplotlib
+- coverage

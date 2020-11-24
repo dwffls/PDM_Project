@@ -18,4 +18,12 @@ Just mention the following:
   - [ ] Chosen planner/controller (RRT*-Reeds-Shepp-Shape)
   - [ ] Planned simulation environment
   - [ ] Planned scenarios for evaluation of the planner
-  - [ ] Graph 
+  - [ ] Graph
+
+
+# Installation
+
+1. Clone this repo.
+2. Install the required libraries
+> conda env create -f environment.yml
+
