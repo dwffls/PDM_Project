@@ -1,11 +1,11 @@
 # PDM Project
 Kareltje is a warehouse filling robot with path planning.
 
-- [ ] Introduction (Daan)
-  - [ ] Klein stukje over uitleg van onze robot en enviroment
+- [x] Introduction (Daan)
+  - [x] Klein stukje over uitleg van onze robot en enviroment
   - [ ] Papers Non-Holonomic 
   - [ ] Papers Path Planning
-  - [ ] Papers Warehouse 
+  - [x] Papers Warehouse 
 
 - [ ] Robot Model (Timo/Luuk)
   - [ ] Kinematic Model 
@@ -15,7 +15,7 @@ Kareltje is a warehouse filling robot with path planning.
 
 Just mention the following:
 - [ ] Planning (Marie/Daan)
-  - [ ] Chosen planner/controller
+  - [ ] Chosen planner/controller (RRT*-Reeds-Shepp-Shape)
   - [ ] Planned simulation environment
   - [ ] Planned scenarios for evaluation of the planner
   - [ ] Graph 
