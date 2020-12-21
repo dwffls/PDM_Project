@@ -65,7 +65,7 @@ class RRTStarReedsShepp(RRTStar):
         self.obstacle_list = obstacle_list
         self.connect_circle_dist = connect_circle_dist
 
-        self.curvature = 1.0
+        self.curvature = 2.0
         self.goal_yaw_th = np.deg2rad(1.0)
         self.goal_xy_th = 0.5
 
@@ -136,7 +136,9 @@ class RRTStarReedsShepp(RRTStar):
         #     plt.plot(ox, oy, "ok", ms=30 * size)
         currentAxs = plt.gca()
         for object in self.obstacle_list:
-            currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
+            currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=0.5, color='r'))
+            currentAxs.add_patch(Rectangle((object[0]+0.2, object[1]+0.2), object[2]-0.4, object[3]-0.4, fill=True, alpha=1))
+
 
         plt.plot(self.start.x, self.start.y, "xr")
         plt.plot(self.end.x, self.end.y, "xr")
@@ -246,16 +248,16 @@ def main(max_iter=500):
     #     (8, 10, 1)
     # ]  # [x,y,size(radius)]
 
-    obstacleList =  [[1,1,3,1], 
-                    [1,3,3,1],
-                    [1,5,3,1],
-                    [1,7,3,1],
-                    [1,9,3,1],
-                    [6,1,3,1], 
-                    [6,3,3,1],
-                    [6,5,3,1],
-                    [6,7,3,1],
-                    [6,9,3,1]]
+    obstacleList =  [[1-0.2,1-0.2,3+0.4,1+0.4], 
+                    [1-0.2,3-0.2,3+0.4,1+0.4],
+                    [1-0.2,5-0.2,3+0.4,1+0.4],
+                    [1-0.2,7-0.2,3+0.4,1+0.4],
+                    [1-0.2,9-0.2,3+0.4,1+0.4],
+                    [6-0.2,1-0.2,3+0.4,1+0.4], 
+                    [6-0.2,3-0.2,3+0.4,1+0.4],
+                    [6-0.2,5-0.2,3+0.4,1+0.4],
+                    [6-0.2,7-0.2,3+0.4,1+0.4],
+                    [6-0.2,9-0.2,3+0.4,1+0.4]]
 
     # Set Initial parameters
     start = [0.0, 0.0, np.deg2rad(90.0)]

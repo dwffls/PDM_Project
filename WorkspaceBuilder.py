@@ -4,7 +4,7 @@ from matplotlib.patches import Rectangle
 
 class Workspace:
   def __init__(self, size, objects, start, targets):
-    self.size = np.array(size)
+        self.size = np.array(size)
     self.objects = np.array(objects)
     self.start = np.array(start)
     self.targets = np.array(targets)
@@ -26,6 +26,10 @@ class Workspace:
     # Plot all the objects
     for (x, y, size_x, size_y) in self.objects:
         currentAxs.add_patch(Rectangle((x, y), size_x, size_y, fill=True, alpha=1))
+        self.fillSquares(x, y, size_x, size_y)
+        
+    for (x, y, size_x, size_y) in self.objects:
+        currentAxs.add_patch(Rectangle((x, y), size_xx+0.2, size_yx+0.2, fill=True, alpha=0.5, color='r'))
         self.fillSquares(x, y, size_x, size_y)
         
 
