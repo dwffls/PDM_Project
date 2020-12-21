@@ -24,11 +24,17 @@ class Workspace:
     plt.plot([self.start[0]], [self.start[1]], marker='o', markersize=5, color="green")
 
     # Plot all the objects
-    for object in self.objects:
-        currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
+    for (x, y, size_x, size_y) in self.objects:
+        currentAxs.add_patch(Rectangle((x, y), size_x, size_y, fill=True, alpha=1))
+        self.fillSquares(x, y, size_x, size_y)
+        
 
     # Plot all targets
     for target in self.targets:
         plt.plot([target[0]], [target[1]], marker='o', markersize=5, color="red")
 
     plt.show()
+
+  def fillSquares(self, x, y, size_x, size_y):
+    plt.plot([x, y], marker='o', markersize=size_x, color="red")
+

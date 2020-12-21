@@ -247,22 +247,33 @@ def main():
     print("Start " + __file__)
 
     # ====Search Path with RRT====
-    obstacle_list = [
-        (5, 5, 1),
-        (3, 6, 2),
-        (3, 8, 2),
-        (3, 10, 2),
-        (7, 5, 2),
-        (9, 5, 2),
-        (8, 10, 1),
-        (6, 12, 1),
-    ]  # [x,y,size(radius)]
+    # obstacle_list = [
+    #     (5, 5, 1),
+    #     (3, 6, 2),
+    #     (3, 8, 2),
+    #     (3, 10, 2),
+    #     (7, 5, 2),
+    #     (9, 5, 2),
+    #     (8, 10, 1),
+    #     (6, 12, 1),
+    # ]  # [x,y,size(radius)]
+
+    obstacle_list =  [[1,1,3,1], 
+                    [1,3,3,1],
+                    [1,5,3,1],
+                    [1,7,3,1],
+                    [1,9,3,1],
+                    [6,1,3,1], 
+                    [6,3,3,1],
+                    [6,5,3,1],
+                    [6,7,3,1],
+                    [6,9,3,1]]
 
     # Set Initial parameters
     rrt_star = RRTStar(
         start=[0, 0],
         goal=[6, 10],
-        rand_area=[-2, 15],
+        rand_area=[0, 11],
         obstacle_list=obstacle_list,
         expand_dis=1)
     path = rrt_star.planning(animation=show_animation)

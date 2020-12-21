@@ -10,9 +10,31 @@ import math
 import random
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 
 show_animation = True
+
+def line_intersect(Ax1, Ay1, Ax2, Ay2, Bx1, By1, Bx2, By2):
+    d = (By2 - By1) * (Ax2 - Ax1) - (Bx2 - Bx1) * (Ay2 - Ay1)
+    if d:
+        uA = ((Bx2 - Bx1) * (Ay1 - By1) - (By2 - By1) * (Ax1 - Bx1)) / d
+        uB = ((Ax2 - Ax1) * (Ay1 - By1) - (Ay2 - Ay1) * (Ax1 - Bx1)) / d
+    else:
+        return False
+    if not(0 <= uA <= 1 and 0 <= uB <= 1):
+        return False
+
+def box_intersect(Ax1, Ay1, Ax2, Ay2, Ox, Oy, size_x, size_y):
+    left = line_intersect(Ax1, Ay1, Ax2, Ay2, Ox, Oy, Ox, Oy+size_y)
+    right = line_intersect(Ax1, Ay1, Ax2, Ay2, Ox+size_x, Oy, Ox, Oy+size_y)
+    top = line_intersect(Ax1, Ay1, Ax2, Ay2, Ox, Oy+size_x, Ox+size_x, Oy+size_y)
+    bottom = line_intersect(Ax1, Ay1, Ax2, Ay2, Ox, Oy, Ox+size_x, Oy)
+
+    if left or right or top or bottom:
+        return False #collision
+    else:
+        return True #safe
 
 
 class RRT:
@@ -91,7 +113,6 @@ class RRT:
 
             if animation and i % 5:
                 self.draw_graph(rnd_node)
-
         return None  # cannot find path
 
     def steer(self, from_node, to_node, extend_length=float("inf")):
@@ -160,8 +181,11 @@ class RRT:
             if node.parent:
                 plt.plot(node.path_x, node.path_y, "-g")
 
-        for (ox, oy, size) in self.obstacle_list:
-            self.plot_circle(ox, oy, size)
+        # for (ox, oy, size) in self.obstacle_list:
+        #     self.plot_circle(ox, oy, size)
+        currentAxs = plt.gca()
+        for object in self.obstacle_list:
+            currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
 
         plt.plot(self.start.x, self.start.y, "xr")
         plt.plot(self.end.x, self.end.y, "xr")
@@ -192,13 +216,24 @@ class RRT:
         if node is None:
             return False
 
-        for (ox, oy, size) in obstacleList:
-            dx_list = [ox - x for x in node.path_x]
-            dy_list = [oy - y for y in node.path_y]
-            d_list = [dx * dx + dy * dy for (dx, dy) in zip(dx_list, dy_list)]
+        for (Ox, Oy, size_x, size_y) in obstacleList:
+            for x in node.path_x:
+                for y in node.path_y:
+                    if x > Ox and x < Ox + size_x and y > Oy and y < Oy + size_y:
+                        return False 
+        #             if box_intersect(x, y, 0.5, 0.5, Ox, Oy, size_x, size_y):
+        #                 intersect = False
+        #             x_prev = x
+        #             y_prev = y
+                    
 
-            if min(d_list) <= size**2:
-                return False  # collision
+        # for (ox, oy, size_x) in obstacleList:
+        #     dx_list = [ox - x for x in node.path_x]
+        #     dy_list = [oy - y for y in node.path_y]
+        #     d_list = [dx * dx + dy * dy for (dx, dy) in zip(dx_list, dy_list)]
+
+        #     if min(d_list) <= size_x**2:
+        #         return False  # collision
 
         return True  # safe
 
@@ -211,17 +246,29 @@ class RRT:
         return d, theta
 
 
-def main(gx=6.0, gy=10.0):
+def main(gx=8, gy=7):
     print("start " + __file__)
 
     # ====Search Path with RRT====
-    obstacleList = [(5, 5, 1), (3, 6, 2), (3, 8, 2), (3, 10, 2), (7, 5, 2),
-                    (9, 5, 2), (8, 10, 1)]  # [x, y, radius]
+    # obstacleList = [(5, 5, 1), (3, 6, 2), (3, 8, 2), (3, 10, 2), (7, 5, 2),
+    #                  (9, 5, 2), (8, 10, 1)]  # [x, y, radius]
+
+    obstacleList =  [[1,1,3,1], 
+                    [1,3,3,1],
+                    [1,5,3,1],
+                    [1,7,3,1],
+                    [1,9,3,1],
+                    [6,1,3,1], 
+                    [6,3,3,1],
+                    [6,5,3,1],
+                    [6,7,3,1],
+                    [6,9,3,1]] # [X, Y, X_size, Y_size]
+
     # Set Initial parameters
     rrt = RRT(
-        start=[0, 0],
+        start=[0.5, 0.5],
         goal=[gx, gy],
-        rand_area=[-2, 15],
+        rand_area=[0, 11],
         obstacle_list=obstacleList)
     path = rrt.planning(animation=show_animation)
 

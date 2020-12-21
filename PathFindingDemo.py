@@ -12,6 +12,7 @@ import random
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) +
@@ -44,7 +45,7 @@ class RRTStarReedsShepp(RRTStar):
             self.path_yaw = []
 
     def __init__(self, start, goal, obstacle_list, rand_area,
-                 max_iter=200,
+                 max_iter=500,
                  connect_circle_dist=50.0
                  ):
         """
@@ -131,15 +132,18 @@ class RRTStarReedsShepp(RRTStar):
             if node.parent:
                 plt.plot(node.path_x, node.path_y, "-g")
 
-        for (ox, oy, size) in self.obstacle_list:
-            plt.plot(ox, oy, "ok", ms=30 * size)
+        # for (ox, oy, size) in self.obstacle_list:
+        #     plt.plot(ox, oy, "ok", ms=30 * size)
+        currentAxs = plt.gca()
+        for object in self.obstacle_list:
+            currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
 
         plt.plot(self.start.x, self.start.y, "xr")
         plt.plot(self.end.x, self.end.y, "xr")
         plt.axis([-2, 15, -2, 15])
         plt.grid(True)
         self.plot_start_goal_arrow()
-        plt.pause(0.01)
+        plt.pause(0.001)
 
     def plot_start_goal_arrow(self):
         reeds_shepp_path_planning.plot_arrow(
@@ -226,29 +230,40 @@ class RRTStarReedsShepp(RRTStar):
         return path
 
 
-def main(max_iter=100):
+def main(max_iter=500):
     print("Start " + __file__)
 
     # ====Search Path with RRT====
-    obstacleList = [
-        (5, 5, 1),
-        (4, 6, 1),
-        (4, 8, 1),
-        (4, 10, 1),
-        (6, 5, 1),
-        (7, 5, 1),
-        (8, 6, 1),
-        (8, 8, 1),
-        (8, 10, 1)
-    ]  # [x,y,size(radius)]
+    # obstacleList = [
+    #     (5, 5, 1),
+    #     (4, 6, 1),
+    #     (4, 8, 1),
+    #     (4, 10, 1),
+    #     (6, 5, 1),
+    #     (7, 5, 1),
+    #     (8, 6, 1),
+    #     (8, 8, 1),
+    #     (8, 10, 1)
+    # ]  # [x,y,size(radius)]
+
+    obstacleList =  [[1,1,3,1], 
+                    [1,3,3,1],
+                    [1,5,3,1],
+                    [1,7,3,1],
+                    [1,9,3,1],
+                    [6,1,3,1], 
+                    [6,3,3,1],
+                    [6,5,3,1],
+                    [6,7,3,1],
+                    [6,9,3,1]]
 
     # Set Initial parameters
-    start = [0.0, 0.0, np.deg2rad(0.0)]
-    goal = [6.0, 7.0, np.deg2rad(90.0)]
+    start = [0.0, 0.0, np.deg2rad(90.0)]
+    goal = [8.0, 8.5, np.deg2rad(0.0)]
 
     rrt_star_reeds_shepp = RRTStarReedsShepp(start, goal,
                                              obstacleList,
-                                             [-2.0, 15.0], max_iter=max_iter)
+                                             [0, 11.0], max_iter=max_iter)
     path = rrt_star_reeds_shepp.planning(animation=show_animation)
 
     # Draw final path
