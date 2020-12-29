@@ -213,20 +213,23 @@ class RRT:
     @staticmethod
     def check_collision(node, obstacleList):
 
+        var = 0.2
+
+
         if node is None:
             return False
 
         for (Ox, Oy, size_x, size_y) in obstacleList:
             for x in node.path_x:
                 for y in node.path_y:
-                    if x > Ox and x < Ox + size_x and y > Oy and y < Oy + size_y:
+                    if x > Ox -var and x < Ox + size_x + 2*var and y > Oy -var and y < Oy + size_y + 2*var:
                         return False 
         #             if box_intersect(x, y, 0.5, 0.5, Ox, Oy, size_x, size_y):
         #                 intersect = False
         #             x_prev = x
         #             y_prev = y
                     
-
+        #for 1 is 4
         # for (ox, oy, size_x) in obstacleList:
         #     dx_list = [ox - x for x in node.path_x]
         #     dy_list = [oy - y for y in node.path_y]
