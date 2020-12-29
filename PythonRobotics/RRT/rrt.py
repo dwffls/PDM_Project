@@ -191,7 +191,7 @@ class RRT:
         plt.plot(self.end.x, self.end.y, "xr")
         plt.axis("equal")
         plt.axis([-2, 15, -2, 15])
-        plt.grid(True)
+        # plt.grid(True)
         plt.pause(0.01)
 
     @staticmethod
@@ -213,7 +213,7 @@ class RRT:
     @staticmethod
     def check_collision(node, obstacleList):
 
-        var = 0.2
+        var = 0.447
 
 
         if node is None:
@@ -222,31 +222,31 @@ class RRT:
         for (Ox, Oy, size_x, size_y) in obstacleList:
             for x in node.path_x:
                 for y in node.path_y:
-                    if x > Ox -var and x < Ox + size_x + 2*var and y > Oy + var and y < Oy + size_y - 2*var:
+                    if x > Ox -var and x < Ox + size_x + 2*var and y > Oy and y < Oy + size_y:
                         return False
-                    elif x > Ox +var and x < Ox + size_x - 2*var and y > Oy - var and y < Oy + size_y + 2*var:
+                    elif x > Ox and x < Ox + size_x and y > Oy - var and y < Oy + size_y + 2*var:
                         return False
+                    elif x > 44 - var and x < var and y > 44 - var and y < var:
+                        return False
+        
+        for (ox, oy, size_x, size_y) in obstacleList:
+            for i in range(4):
+                if i == 0: # Bottom left
+                    dx_list = [ox - x for x in node.path_x]
+                    dy_list = [oy - y for y in node.path_y]
+                elif i == 1: # Bottom right
+                    dx_list = [ox + size_x - x for x in node.path_x]
+                    dy_list = [oy - y for y in node.path_y]
+                elif i == 2: # Top left
+                    dx_list = [ox - x for x in node.path_x]
+                    dy_list = [oy + size_y - y for y in node.path_y]
+                elif i == 3: # Top right
+                    dx_list = [ox + size_x - x for x in node.path_x]
+                    dy_list = [oy + size_y - y for y in node.path_y]
             
-
-        # for (Ox, Oy, size_x, size_y) in obstacleList:
-        #     for x in node.path_x:
-        #         for y in node.path_y:
-                    
-        #                 return False 
-        #             if box_intersect(x, y, 0.5, 0.5, Ox, Oy, size_x, size_y):
-        #                 intersect = False
-        #             x_prev = x
-        #             y_prev = y
-                    
-        # for (ox, oy, size_x, size_y) in obstacleList:
-        #     for i in range(3):
-                
-        #     dx_list = [ox - x for x in node.path_x]
-        #     dy_list = [oy - y for y in node.path_y]
-        #     d_list = [dx * dx + dy * dy for (dx, dy) in zip(dx_list, dy_list)]
-
-        #     if min(d_list) <= size_x**2:
-        #         return False  # collision
+                d_list = [dx * dx + dy * dy for (dx, dy) in zip(dx_list, dy_list)]
+                if min(d_list) <= var**2:
+                    return False  # collision
 
         return True  # safe
 

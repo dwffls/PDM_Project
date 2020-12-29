@@ -12,7 +12,7 @@ import random
 import sys
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, Circle
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) +
@@ -65,7 +65,7 @@ class RRTStarReedsShepp(RRTStar):
         self.obstacle_list = obstacle_list
         self.connect_circle_dist = connect_circle_dist
 
-        self.curvature = 5
+        self.curvature = np.sqrt(2)
         self.goal_yaw_th = np.deg2rad(1.0)
         self.goal_xy_th = 0.5
 
@@ -136,25 +136,29 @@ class RRTStarReedsShepp(RRTStar):
         #     plt.plot(ox, oy, "ok", ms=30 * size)
         currentAxs = plt.gca()
 
-        var = 0.2
-        for object in self.obstacle_list:
-            # Approaching config space
-            currentAxs.add_patch(Rectangle((object[0]-var, object[1]-var), object[2]+2*var, object[3]+2*var, fill=True, alpha=0.5, color='r'))
-            # True Obstacle
-            #currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
-            # Rectagnles
-            currentAxs.add_patch(Rectangle((object[0]-var, object[1]+var), object[2]+2*var, object[3]-2*var, fill=True, alpha=0.5, color='g'))
-            currentAxs.add_patch(Rectangle((object[0]+var, object[1]-var), object[2]-2*var, object[3]+2*var, fill=True, alpha=0.5, color='purple'))
-            #currentAxs.add_patch(Rectangle((object[0]+var, object[1]), object[2]-2*var, object[3]+2*var, fill=True, alpha=0.5, color='g'))
-            # originele
+        var = 0.447
 
+        for (Ox, Oy, size_x, size_y) in self.obstacle_list:
+            # Circles
+            currentAxs.add_patch(Circle((Ox, Oy), var, fill=True, color='b')) #Bottom left
+            currentAxs.add_patch(Circle((Ox+size_x, Oy), var, fill=True, color='b')) #Bottom right
+            currentAxs.add_patch(Circle((Ox, Oy+size_y), var, fill=True,color='b')) #Top left
+            currentAxs.add_patch(Circle((Ox+size_x, Oy+size_y), var, fill=True, color='b')) #Top right
+            # Rectangles
+            currentAxs.add_patch(Rectangle((Ox-var, Oy), size_x+2*var, size_y, fill=True, color='b'))
+            currentAxs.add_patch(Rectangle((Ox, Oy-var), size_x, size_y+2*var, fill=True, color='b'))
+            # Origineel
+            currentAxs.add_patch(Rectangle((Ox, Oy), size_x, size_y, fill=True, color="k"))
 
+        currentAxs.add_patch(Rectangle((0, 0), 45, 45, fill=False, color="k"))
+
+        currentAxs.axis('equal')
         plt.plot(self.start.x, self.start.y, "xr")
         plt.plot(self.end.x, self.end.y, "xr")
-        plt.axis([-2, 15, -2, 15])
-        plt.grid(True)
+        plt.axis([-2, 46, -2, 46])
+        # plt.grid(True)
         self.plot_start_goal_arrow()
-        plt.pause(0.001)
+        plt.pause(0.0001)
 
     def plot_start_goal_arrow(self):
         reeds_shepp_path_planning.plot_arrow(
@@ -259,32 +263,34 @@ def main(max_iter=500):
 
     #obstacleList =  [[5,5,8,8]]
 
-    obstacleList =  [[1,1,3,1], 
-                    [1,3,3,1],
-                    [1,5,3,1],
-                    [1,7,3,1],
-                    [1,9,3,1],
-                    [6,1,3,1],
-                    [6,3,3,1],
-                    [6,5,3,1],
-                    [6,7,3,1],
-                    [6,9,3,1]]
+    obstacleList =  [[4,4,16,4],
+                    [4,12,16,4],
+                    [4,20,16,4],
+                    [4,28,16,4],
+                    [4,36,16,4],
+                    [24,4,16,4],
+                    [24,12,16,4],
+                    [24,20,16,4],
+                    [24,28,16,4],
+                    [24,36,16,4]] # [X, Y, X_size, Y_size]
                     
 
     # Set Initial parameters
-    start = [0.0, 0.0, np.deg2rad(90.0)]
-    goal = [8.0, 8.5, np.deg2rad(0.0)]
+    start = [2.0, 2.0, np.deg2rad(90.0)]
+    goal = [35.0, 25.5, np.deg2rad(0.0)]
 
     rrt_star_reeds_shepp = RRTStarReedsShepp(start, goal,
                                              obstacleList,
-                                             [0, 11.0], max_iter=max_iter)
+                                             [0, 44.0], max_iter=max_iter)
     path = rrt_star_reeds_shepp.planning(animation=show_animation)
 
     # Draw final path
     if path and show_animation:  # pragma: no cover
         rrt_star_reeds_shepp.draw_graph()
         plt.plot([x for (x, y, yaw) in path], [y for (x, y, yaw) in path], '-r')
-        plt.grid(True)
+        # plt.grid(True)
+        ax = plt.gca()
+        ax.axis('equal')
         plt.pause(0.001)
         plt.show()
 
