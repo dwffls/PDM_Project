@@ -65,7 +65,7 @@ class RRTStarReedsShepp(RRTStar):
         self.obstacle_list = obstacle_list
         self.connect_circle_dist = connect_circle_dist
 
-        self.curvature = 0.5
+        self.curvature = 5
         self.goal_yaw_th = np.deg2rad(1.0)
         self.goal_xy_th = 0.5
 
@@ -135,10 +135,17 @@ class RRTStarReedsShepp(RRTStar):
         # for (ox, oy, size) in self.obstacle_list:
         #     plt.plot(ox, oy, "ok", ms=30 * size)
         currentAxs = plt.gca()
+
+        var = 0.2
         for object in self.obstacle_list:
-            currentAxs.add_patch(Rectangle((object[0]-0.2, object[1]-0.2), object[2]+0.4, object[3]+0.4, fill=True, alpha=0.5, color='r'))
-            #-0.2
-            currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
+            # Approaching config space
+            currentAxs.add_patch(Rectangle((object[0]-var, object[1]-var), object[2]+2*var, object[3]+2*var, fill=True, alpha=0.5, color='r'))
+            # True Obstacle
+            #currentAxs.add_patch(Rectangle((object[0], object[1]), object[2], object[3], fill=True, alpha=1))
+            # Rectagnles
+            currentAxs.add_patch(Rectangle((object[0]-var, object[1]+var), object[2]+2*var, object[3]-2*var, fill=True, alpha=0.5, color='g'))
+            currentAxs.add_patch(Rectangle((object[0]+var, object[1]-var), object[2]-2*var, object[3]+2*var, fill=True, alpha=0.5, color='purple'))
+            #currentAxs.add_patch(Rectangle((object[0]+var, object[1]), object[2]-2*var, object[3]+2*var, fill=True, alpha=0.5, color='g'))
             # originele
 
 
@@ -250,7 +257,9 @@ def main(max_iter=500):
     #     (8, 10, 1)
     # ]  # [x,y,size(radius)]
 
-    obstacleList =  [[1,1,3,1],
+    #obstacleList =  [[5,5,8,8]]
+
+    obstacleList =  [[1,1,3,1], 
                     [1,3,3,1],
                     [1,5,3,1],
                     [1,7,3,1],
@@ -260,6 +269,7 @@ def main(max_iter=500):
                     [6,5,3,1],
                     [6,7,3,1],
                     [6,9,3,1]]
+                    
 
     # Set Initial parameters
     start = [0.0, 0.0, np.deg2rad(90.0)]
