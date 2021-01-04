@@ -1,6 +1,6 @@
 # PDM Project
-Kareltje is a warehouse filling robot with path planning.
-
+Code for project of Planning and Decision Making
+<!-- 
 - [x] Introduction (Daan)
   - [x] Klein stukje over uitleg van onze robot en enviroment
   - [ ] Papers Non-Holonomic 
@@ -18,7 +18,7 @@ Just mention the following:
   - [ ] Chosen planner/controller (RRT*-Reeds-Shepp-Shape)
   - [ ] Planned simulation environment
   - [ ] Planned scenarios for evaluation of the planner
-  - [ ] Graph
+  - [ ] Graph -->
 
 
 # Installation
