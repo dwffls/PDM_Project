@@ -10,6 +10,7 @@ import math
 import os
 import random
 import sys
+import time
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Circle
@@ -245,23 +246,12 @@ class RRTStarReedsShepp(RRTStar):
         return path
 
 
+# Change iteration amount here
 def main(max_iter=500):
     print("Start " + __file__)
 
-    # ====Search Path with RRT====
-    # obstacleList = [
-    #     (5, 5, 1),
-    #     (4, 6, 1),
-    #     (4, 8, 1),
-    #     (4, 10, 1),
-    #     (6, 5, 1),
-    #     (7, 5, 1),
-    #     (8, 6, 1),
-    #     (8, 8, 1),
-    #     (8, 10, 1)
-    # ]  # [x,y,size(radius)]
-
-    #obstacleList =  [[5,5,8,8]]
+    # Uncomment Array to change scenario
+    # Arrays are in form: [X, Y, X_size, Y_size]
 
     # Scenario 1
     obstacleList =  [[4,4,16,4],
@@ -273,8 +263,7 @@ def main(max_iter=500):
                     [24,12,16,4],
                     [24,20,16,4],
                     [24,28,16,4],
-                    [24,36,16,4]] # [X, Y, X_size, Y_size]
-
+                    [24,36,16,4]] 
 
     # # Scenario 2
     # obstacleList =  [[4,4,7,4],
@@ -296,26 +285,29 @@ def main(max_iter=500):
     #                 [34,12,7,4],
     #                 [34,20,7,4],
     #                 [34,28,7,4],
-    #                 [34,36,7,4]] # [X, Y, X_size, Y_size]
+    #                 [34,36,7,4]] 
 
-
-    # # Scenario 3
+    # Scenario 3
     # obstacleList =  [[4,4,12,4],
     #                 [4,20,12,4],
     #                 [4,36,12,4],
-                    
-    #                 [24,5,4,35],
-    #                             ] # [X, Y, X_size, Y_size]
-
+    #                 [24,5,4,35]]
     # Set Initial parameters
     start = [2.0, 2.0, np.deg2rad(90.0)]
     goal = [35.0, 25.5, np.deg2rad(0.0)]
+    start_time = time.perf_counter()
 
+    # Start actual algorithm
+    # Colision detection can be found in PythonRobotics/RRT/rrt.py at line 214
+    
     rrt_star_reeds_shepp = RRTStarReedsShepp(start, goal,
                                              obstacleList,
-                                             [0, 44.0], max_iter=max_iter)
+                                             [0, 45.0], max_iter=max_iter)
     path = rrt_star_reeds_shepp.planning(animation=show_animation)
 
+    # Calculate time needed
+    end = time.perf_counter()
+    print("time elapsed: ", end - start_time)
     # Draw final path
     if path and show_animation:  # pragma: no cover
         rrt_star_reeds_shepp.draw_graph()
@@ -325,7 +317,6 @@ def main(max_iter=500):
         ax.axis('equal')
         plt.pause(0.001)
         plt.show()
-
 
 if __name__ == '__main__':
     main()

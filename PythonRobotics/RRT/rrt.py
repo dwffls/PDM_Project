@@ -212,23 +212,28 @@ class RRT:
 
     @staticmethod
     def check_collision(node, obstacleList):
-
-        var = 0.447
-
+        
+        # Set radius of robot
+        radius = 0.361 
 
         if node is None:
             return False
 
+        # Check for the rectangles
         for (Ox, Oy, size_x, size_y) in obstacleList:
             for x in node.path_x:
                 for y in node.path_y:
-                    if x > Ox -var and x < Ox + size_x + 2*var and y > Oy and y < Oy + size_y:
+                    # Check Blue Rectangle
+                    if x > Ox -radius and x < Ox + size_x + 2*radius and y > Oy and y < Oy + size_y:
                         return False
-                    elif x > Ox and x < Ox + size_x and y > Oy - var and y < Oy + size_y + 2*var:
+                    # Check Green Rectangle
+                    elif x > Ox and x < Ox + size_x and y > Oy - radius and y < Oy + size_y + 2*radius:
                         return False
-                    elif x > 44 - var and x < var and y > 44 - var and y < var:
+                    # Check for out of bounds condition
+                    elif x > 45 - radius and x < radius and y > 45 - radius and y < radius:
                         return False
         
+        # Check for corner circles
         for (ox, oy, size_x, size_y) in obstacleList:
             for i in range(4):
                 if i == 0: # Bottom left
@@ -245,7 +250,7 @@ class RRT:
                     dy_list = [oy + size_y - y for y in node.path_y]
             
                 d_list = [dx * dx + dy * dy for (dx, dy) in zip(dx_list, dy_list)]
-                if min(d_list) <= var**2:
+                if min(d_list) <= radius**2:
                     return False  # collision
 
         return True  # safe

@@ -26,4 +26,5 @@ Just mention the following:
 1. Clone this repo.
 2. Install the required libraries
 > conda env create -f environment.yml
-
+3. Run Path_Planning.py
+> python3 Path_Planning.py
